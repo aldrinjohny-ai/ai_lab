@@ -1,0 +1,51 @@
+from collections import deque
+goal=(1,2,3,
+      4,5,6,
+      7,8,0)
+def neighbors(state):
+    result=[]
+    blank=state.index(0)
+    row=blank//3
+    col=blank%3#so blank is 4//3=1 and col=4%3=1
+    moves=[(-1,0),(1,0),(0,-1),(0,1)]
+    for dr,dc in moves:
+        new_row=row+dr
+        new_col=col+dc
+        if 0<=new_row<3 and 0<=new_col<3:#constraint
+            new_blank=new_row*3+new_col
+            temp=list(state)#converting state to list as tuples cannot be changed
+            temp[blank],temp[new_blank]=temp[new_blank],temp[blank]#swapping'
+            result.append(tuple(temp))
+    return result
+def bfs(start):
+    queue=deque([(start,[])])
+    visited={start}
+    while queue:#as long as queue is not empty
+        state,path=queue.popleft()
+        if state==goal:
+            return path+[state]
+        for nxt in neighbors(state):
+            if nxt not in visited:
+                visited.add(nxt)
+                queue.append((nxt,path+[state]))
+    return None
+def print_state(state):
+    for i in range(0,9,3):
+        print(state[i:i+3])
+        print()
+start=(1,2,3,
+      4,0,6,
+      7,5,8)
+print("Initial State")
+print_state(start)
+
+print("BFS Solution")
+answer=bfs(start)
+for s in answer:
+    print_state(s)
+        
+            
+            
+        
+    
+    
